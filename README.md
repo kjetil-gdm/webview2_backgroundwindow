@@ -1,12 +1,12 @@
 # webview2_backgroundwindow
- Hosting WebView2 in a Window behind wpf48 application window to fix airspace issue.
+ Hosting WebView2 in a Window behind wpf .net48 application window to fix airspace issue.
  Solution with webview2backhost nuget-source and Sample project on github.
 
 # webview2backhost
-WebView2 with Edge is fast and glorious, but you cannot render controls over the damned thing in wpf48, like cefsharp. 
-This hacky fix puts WebView2 in a Window behind your application, so that you can put render controls over it.<br>
-<br>
-My scenario was that I needed to play a stream (hls, m38u) in wpf48, but found issues with libs like vlc.dotnet, ffme.windows, flyleaf and xaml island hosted uwp mediaplayerelement. So I use this to play videos in video.js in an edge window sitting behind my app.
+WebView2 with Edge is fast and glorious, but you cannot render controls over the damned thing in wpf .net48, like cefsharp. 
+This hacky fix puts WebView2 in a Window behind your application, so that you can put render controls over it.  
+  
+My scenario was that I needed to play a stream (hls, m38u) in wpf .net48, but found issues with libs like vlc.dotnet, ffme.windows, flyleaf and xaml island hosted uwp mediaplayerelement. So I use this to play videos in video.js in an edge window sitting behind my app.
 
 ## Interacting with the webview 
 
@@ -23,12 +23,12 @@ I only needed to show the webview and not interact with it, so I haven't tested 
 
 ## Usage, code sample
  
- in xaml:<br>
- &lt;Window [...] AllowsTransparency="True" Loaded="Window_Loaded" AllowsTransparency="True" WindowStyle="None" Background="Transparent" &gt;
+ in xaml: 
+ &lt;Window [...] AllowsTransparency="True" Loaded="Window_Loaded" WindowStyle="None" Background="Transparent" &gt;
 
 
  code-behind:
-<bR>
+  
 
     using Microsoft.Web.WebView2.Wpf;
 (...)

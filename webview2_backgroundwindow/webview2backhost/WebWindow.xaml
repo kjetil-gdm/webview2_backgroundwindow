@@ -9,6 +9,6 @@
         mc:Ignorable="d" WindowStyle="None" Background="Black"  d:Width="1920" d:Height="1080"
         Title="MediaPlayerElementWindow" Height="1080" Width="1920" WindowStartupLocation="CenterOwner">
     
-    <vw:WebView2  x:Name="_webView" ZoomFactor="1"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"   ></vw:WebView2>
+    <vw:WebView2  x:Name="_webView" ZoomFactor="1"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" DefaultBackgroundColor="Black"   ></vw:WebView2>
 
 </Window>

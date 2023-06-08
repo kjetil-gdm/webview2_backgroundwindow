@@ -34,6 +34,7 @@ namespace webview2backhost
         public event WebView2EventHandler WebView2Loaded;
 
  
+
         Window _Parent = null;
         private IntPtr _ParentHandle = IntPtr.Zero;
 
@@ -53,6 +54,30 @@ namespace webview2backhost
         {
 
             InitializeComponent();
+
+        }
+
+
+        /// <summary>
+        /// Dsposes the WebView2 to prevent it from hanging around in the background and closes the hosting Window
+        /// </summary>
+        new public void Close()
+        {
+            try { 
+            _webView?.Dispose();
+            _webView = null;
+            _Parent.SizeChanged -= _Parent_SizeChanged;
+            _Parent.LocationChanged -= _Parent_LocationChanged;
+            _Parent.StateChanged -= _Parent_StateChanged;
+            _Parent.Closed -= _Parent_Closed;
+            }catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("#Exception in WebWindow.Close() "+ ex.ToString() +Environment.NewLine+ex.StackTrace);
+            }
+            finally
+            {
+                base.Close();
+            }
 
         }
         
@@ -97,6 +122,7 @@ namespace webview2backhost
             
         }
 
+ 
         private void _Parent_Closed(object sender, EventArgs e)
         {
             this.Close();
