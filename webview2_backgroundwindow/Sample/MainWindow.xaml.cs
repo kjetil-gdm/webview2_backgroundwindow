@@ -37,6 +37,7 @@ namespace Sample
 
             _webView = await mpew.WebView2ControlAsync();
             _webView.Source = new Uri("https://gdm.no/offline");
+            
             this.Background = new SolidColorBrush(Color.FromArgb(1, 255, 255, 255)); // Background="#01ffffff"
             //this.Background = new SolidColorBrush(Colors.Transparent); //use this to allow mouse actions through your window.
             Storyboard sb =(Storyboard) this.Resources["sb"];
