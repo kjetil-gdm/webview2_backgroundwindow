@@ -32,9 +32,11 @@ namespace Sample
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             mpew = new webview2backhost.WebWindow(this);
-            //mpew.WebView2Loaded += Mpew_WebView2Loaded;
-            mpew.Show();
 
+            //mpew.WebView2Loaded += Mpew_WebView2Loaded;
+            mpew.Title = "";
+            mpew.Show();
+ 
             _webView = await mpew.WebView2ControlAsync();
             _webView.Source = new Uri("https://gdm.no/offline");
             
