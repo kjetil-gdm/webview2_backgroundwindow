@@ -19,6 +19,11 @@ If you want to block the mouse actions pass-through set Background to almost tra
 If you set _your_ Window to Transparent, mouse interactions are passed through to the WebView2.<br>
 I only needed to show the webview and not interact with it, so I haven't tested exstentively.  
 
+## Versions
+
+1.0.1.4
+Removed annoying Console.WriteLine("Window Align").
+Removed webview2backhost window ("BehindWindow") from Alt-Tab list, prevented window from showing as "minimized" over taskbar in minimized mode (by calling .Hide() on "parent" minimization).
 
 
 ## Usage, code sample
