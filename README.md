@@ -21,9 +21,13 @@ I only needed to show the webview and not interact with it, so I haven't tested 
 
 ## Versions
 
-1.0.1.4
+1.0.1.5
 Removed annoying Console.WriteLine("Window Align").
-Removed webview2backhost window ("BehindWindow") from Alt-Tab list, prevented window from showing as "minimized" over taskbar in minimized mode (by calling .Hide() on "parent" minimization).
+Removed WebWindow (Title="BehindWindow") from Alt-Tab list, prevented WebWindow from showing as "minimized" over taskbar in minimized mode (by calling .Hide() on "parent" minimization).
+
+1.0.1.3
+WebWindow.Close() now removes the background process by setting Webview2 controller to null, added WebView2.DefaultBackgroundColor="Black".
+
 
 
 ## Usage, code sample
