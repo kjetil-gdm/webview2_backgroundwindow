@@ -56,6 +56,12 @@ namespace webview2backhost.Utils
             [DllImport("comctl32.dll")]
             public static extern IntPtr DefSubclassProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
+            [DllImport("user32")]
+            public static extern bool PhysicalToLogicalPointForPerMonitorDPI(IntPtr hwnd, ref Point lpRect);
+
+            [DllImport("user32.dll", SetLastError = true)]
+            public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+
             [DllImport("user32.dll")]
             public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, UInt32 uFlags);
 
@@ -91,7 +97,19 @@ namespace webview2backhost.Utils
             [DllImport("User32.dll")]
             public static extern int SetWindowRgn(IntPtr hWnd, IntPtr hRgn, bool bRedraw);
 
-            [DllImport("user32.dll")]
+        [DllImport(@"dwmapi.dll")]
+        private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, ref RECT pvAttribute, int cbAttribute);
+
+        public static bool GetWindowActualRect(IntPtr handle, ref RECT rect)
+        {
+            const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
+            int result = DwmGetWindowAttribute(handle, DWMWA_EXTENDED_FRAME_BOUNDS, ref rect, Marshal.SizeOf(typeof(RECT)));
+
+            return result >= 0;
+        }
+
+
+        [DllImport("user32.dll")]
             public static extern bool GetWindowRect(IntPtr hwnd, ref RECT rectangle);
 
             [DllImport("user32.dll")]

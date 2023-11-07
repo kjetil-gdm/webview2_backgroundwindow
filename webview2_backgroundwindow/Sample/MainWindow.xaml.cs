@@ -1,4 +1,6 @@
-﻿using Microsoft.Web.WebView2.Wpf;
+﻿
+
+using mediaplayerelementhost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,35 +29,35 @@ namespace Sample
             InitializeComponent();
         }
 
-        WebView2 _webView;
-        webview2backhost.WebWindow mpew;
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            mpew = new webview2backhost.WebWindow(this);
-
-            //mpew.WebView2Loaded += Mpew_WebView2Loaded;
-            mpew.Title = "";
-            mpew.Show();
- 
-            _webView = await mpew.WebView2ControlAsync();
-            _webView.Source = new Uri("https://gdm.no/offline");
-            
-            this.Background = new SolidColorBrush(Color.FromArgb(1, 255, 255, 255)); // Background="#01ffffff"
-            //this.Background = new SolidColorBrush(Colors.Transparent); //use this to allow mouse actions through your window.
-            Storyboard sb =(Storyboard) this.Resources["sb"];
-            sb.Begin();
-        }
-
-
-        private void Mpew_WebView2Loaded(object sender, webview2backhost.WebView2LoadedEventArgs e)
-        {
-            _webView = e.WebView2Control;
-            _webView.Source = new Uri("https://gdm.no/offline");
-        }
-
+       
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             MessageBox.Show("Mouse top!");
+        }
+
+        ucBrowser _ucBrowser;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+              _ucBrowser = new ucBrowser();
+
+            this.grid.Children.Add(_ucBrowser);
+            this.btnKill.Visibility = Visibility.Visible;
+            //this.Background = new SolidColorBrush(Colors.Transparent); //use this to allow mouse actions through your window.
+            Storyboard sb = (Storyboard)this.Resources["sb"];
+            sb.Begin();
+
+            this.Background = new SolidColorBrush(Color.FromArgb(1, 255, 255, 255)); // Background="#01ffffff"
+
+        }
+
+        private void btnKill_Click(object sender, RoutedEventArgs e)
+        {
+            
+            this.grid.Children.Clear();
+            this.btnKill.Visibility =Visibility.Collapsed;
+            //this.Background = Brushes.HotPink;
+            this.Background = new SolidColorBrush(Color.FromArgb(100, 255, 255, 255));
         }
     }
 }

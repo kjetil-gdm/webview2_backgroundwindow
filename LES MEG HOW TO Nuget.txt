@@ -1,8 +1,6 @@
 NuGet pack webview2backhost.csproj -Prop Configuration=Release
 
-
-
-
+Oppdater versjon i .nuspec filen først
 
 Last opp på nuget.org (kjetil@gdm.no, devgdm)
 Ved feil i publisert pakke, logg på nuget og unlist den versjonen.

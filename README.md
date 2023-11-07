@@ -21,6 +21,9 @@ I only needed to show the webview and not interact with it, so I haven't tested 
 
 ## Versions
 
+1.0.1.6
+Improved handling of maximized window on multi-monitor setup.
+
 1.0.1.5
 Removed annoying Console.WriteLine("Window Align").
 Removed WebWindow (Title="BehindWindow") from Alt-Tab list, prevented WebWindow from showing as "minimized" over taskbar in minimized mode (by calling .Hide() on "parent" minimization).

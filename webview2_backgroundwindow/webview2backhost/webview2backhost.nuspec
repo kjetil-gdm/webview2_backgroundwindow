@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>$id$</id>
-    <version>1.0.1.5</version>
+    <version>1.0.1.8</version>
     <title>$title$</title>
     <authors>Kjetil Larsen</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -13,7 +13,7 @@
       Airspace fix for WebView2. 
       Creates a Window with WebView2, manipulates the window to sit behind your main window, so that you can put other controls over the WebView2.
     </description>
-    <releaseNotes>Initial release</releaseNotes>
+    <releaseNotes>Improved handling of maximized window on multi-monitor setup.</releaseNotes>
     <copyright>$copyright$</copyright>
     <tags>WebView2 WPF .net48 Airspace Transparent Fix Control Hosted Behind Over In Front</tags>
     <dependencies>

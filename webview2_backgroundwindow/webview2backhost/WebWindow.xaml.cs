@@ -4,6 +4,7 @@ using Microsoft.Web.WebView2.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -56,11 +57,16 @@ namespace webview2backhost
             try { 
             _webView?.Dispose();
             _webView = null;
-            _Parent.SizeChanged -= _Parent_SizeChanged;
+                this.Activated -= Me_Activated;
+                _Parent.Activated -= _Parent_Activated;
+                _Parent.SizeChanged -= _Parent_SizeChanged;
             _Parent.LocationChanged -= _Parent_LocationChanged;
             _Parent.StateChanged -= _Parent_StateChanged;
             _Parent.Closed -= _Parent_Closed;
-            }catch(Exception ex)
+
+
+            }
+            catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("#Exception in WebWindow.Close() "+ ex.ToString() +Environment.NewLine+ex.StackTrace);
             }
@@ -107,7 +113,8 @@ namespace webview2backhost
 
             _Parent.StateChanged += _Parent_StateChanged;
             _Parent.Closed += _Parent_Closed;
-            //_Parent.Activated += _Parent_Activated;
+            this.Activated += Me_Activated;
+            _Parent.Activated += _Parent_Activated;
             Window_Align();
         
         }
@@ -131,9 +138,15 @@ namespace webview2backhost
             Window_Align();
         }
 
+        private void Me_Activated(object sender, EventArgs e)
+        {
+            //Console.WriteLine("_Me_Activated");
+            Window_Align();
+        }
+
         private void _Parent_Activated(object sender, EventArgs e)
         {
-           // Console.WriteLine("_Parent_Activated");
+         // Console.WriteLine("_Parent_Activated");
             Window_Align();
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -192,13 +205,14 @@ namespace webview2backhost
  
             Window_Align();
         }
+
+
  
-       //int align_count = 0;
+
+        //int align_count = 0;
         private void Window_Align()
         {
-
- 
-
+             
            //align_count++;
            //Console.WriteLine("Window Align "+ align_count);
 
@@ -223,33 +237,62 @@ namespace webview2backhost
                 }
                 else
                 {
-                    this.WindowState = _Parent.WindowState;
-                    this.Show();  
+
+                    if (_Parent.WindowState == WindowState.Maximized)
+                    {
+                        Utils.NativeMethods.RECT xRect = new Utils.NativeMethods.RECT();
+                        if (Utils.NativeMethods.GetWindowRect(_ParentHandle, ref xRect)) //GetWindowActualRect or GetWindowRect(_ParentHandle, ref xRect))
+                        {
+
+                            //PhysicalToLogicalPointForPerMonitorDPI) here?
+
+                            Utils.NativeMethods.MoveWindow(_MyHandle, xRect.Left, xRect.Top, xRect.Right - xRect.Left, xRect.Bottom - xRect.Top, false);
+                            /*double dpiX, dpiY;
+                            Utils.NativeMethods.GetDPI(_MyHandle, out dpiX, out dpiY);
+
+                            double dLeft = xRect.Left  / dpiX;
+                            double dTop = xRect.Top / dpiY;
+
+                            this.Left = dLeft;
+                            this.Top = dTop;*/
+                         }
+          
+                       // this.Width = _Parent.Width; // parentRect.Width;
+                     //   this.Height = _Parent.Height; // parentRect.Height;
+                    }
+                    else
+                    {
+                        this.Left = _Parent.Left;
+                        this.Top = _Parent.Top;
+                        this.Width = _Parent.Width;
+                        this.Height = _Parent.Height;
+                    }
+
+                    //this.WindowState = _Parent.WindowState;
+                    this.Show();
+
+                    int exStyle = (int)Utils.NativeMethods.GetWindowLong(_MyHandle, (int)Utils.NativeMethods.WindowLongFlags.GWL_EXSTYLE);
+                    exStyle |= (int)Utils.NativeMethods.WindowStylesEx.WS_EX_TOOLWINDOW;
+
+                    Utils.NativeMethods.SetWindowLong(_MyHandle, (int)Utils.NativeMethods.WindowLongFlags.GWL_EXSTYLE, (IntPtr)exStyle);
+
                 }
-
-
-                    this.Left = _Parent.Left;
-                    this.Top = _Parent.Top;
-                    this.Width = _Parent.ActualWidth; 
-                    this.Height = _Parent.ActualHeight;
-                int exStyle = (int)Utils.NativeMethods.GetWindowLong(_MyHandle, (int)Utils.NativeMethods.WindowLongFlags.GWL_EXSTYLE);
-                exStyle |= (int)Utils.NativeMethods.WindowStylesEx.WS_EX_TOOLWINDOW;
-
-                Utils.NativeMethods.SetWindowLong(_MyHandle, (int)Utils.NativeMethods.WindowLongFlags.GWL_EXSTYLE, (IntPtr)exStyle);
-
-                /*Console.WriteLine("this.Width: " + this.Width + ", Parent: " + _Parent.Width + ", Actual: " + _Parent.ActualWidth);
-                Console.WriteLine("this.Height: " + this.Height + ", Parent: " + _Parent.Height + ", Actual: " + _Parent.ActualHeight);
-                Console.WriteLine("this.Left: " + this.Left + ", Parent: " + _Parent.Left);
-                Console.WriteLine("this.Top: " + this.Top + ", Parent: " + _Parent.Top); */
+              /*  Console.WriteLine("----");
+                //Console.WriteLine("this.Width: " + this.Width + ", Parent: " + _Parent.Width + ", Actual: " + _Parent.ActualWidth);
+                //Console.WriteLine("this.Height: " + this.Height + ", Parent: " + _Parent.Height + ", Actual: " + _Parent.ActualHeight);
+                //Console.WriteLine("this.Left: " + this.Left + ", Parent: " + _Parent.Left);
+                //Console.WriteLine("this.Top: " + this.Top + ", Parent: " + _Parent.Top); */
 
             }));
             //Console.WriteLine("SetWindowPos");
             //Set this Window to be on top in z-order, then set the Parent window to be top in z-order.
             Utils.NativeMethods.SetWindowPos(_ParentHandle, (IntPtr)Utils.NativeMethods.SetWindowPosFlags.SWP_TOP, 0, 0, 0, 0, (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOMOVE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOSIZE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOACTIVATE);
 
+            Utils.NativeMethods.SetWindowPos(_MyHandle, _ParentHandle, 0, 0, 0, 0, (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOMOVE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOSIZE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOACTIVATE);
+
+
             //Utils.NativeMethods.SetWindowPos(_MyHandle, (IntPtr)Utils.NativeMethods.SetWindowPosFlags.SWP_TOP, 0, 0, 0, 0, (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOMOVE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOSIZE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOACTIVATE);
 
-            Utils.NativeMethods.SetWindowPos(_MyHandle, _ParentHandle, 0, 0, 0, 0, (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOMOVE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOSIZE | (uint)Utils.NativeMethods.SetWindowPosFlags.SWP_NOACTIVATE);
 
             // Console.WriteLine("Align, new state: : " + this.WindowState.ToString() +", top: "+ this.Top.ToString());
             //Console.WriteLine("Fin.");
