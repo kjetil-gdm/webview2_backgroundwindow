@@ -21,6 +21,9 @@ I only needed to show the webview and not interact with it, so I haven't tested 
 
 ## Versions
 
+1.0.1.8
+Improved handling of self and parent activation (switching to/minimizing/maximizing with e.g Win+D, Win+M, Alt-Tab)
+
 1.0.1.6
 Improved handling of maximized window on multi-monitor setup.
 
